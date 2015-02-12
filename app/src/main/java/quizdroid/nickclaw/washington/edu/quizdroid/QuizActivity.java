@@ -44,7 +44,17 @@ public class QuizActivity extends Activity {
         // get intent info
         Intent intent = getIntent();
         name = intent.getStringExtra("name");
-        description = "";
+        switch(name) {
+            case "Math":
+                description = "Math questions! So fun";
+                break;
+            case "Physics":
+                description = "HOLY CRAP. PHYSICS FUN.";
+                break;
+            case "Marvel Super Heroes":
+                description = "They're like people. But better. How much do you know about them?";
+                break;
+        }
 
         // get quiz
         questions = quizzes.get(name);
@@ -79,9 +89,9 @@ public class QuizActivity extends Activity {
             super.onActivityCreated(state);
             activity = (QuizActivity) getActivity();
 
-            ((TextView) activity.findViewById(R.id.textView)).setText("name");
-            ((TextView) activity.findViewById(R.id.textView2)).setText("description");
-            ((TextView) activity.findViewById(R.id.textView3)).setText("count");
+            ((TextView) activity.findViewById(R.id.textView)).setText(activity.name);
+            ((TextView) activity.findViewById(R.id.textView2)).setText(activity.description);
+            ((TextView) activity.findViewById(R.id.textView3)).setText(activity.questions.length + " questions.");
             ((Button) activity.findViewById(R.id.button)).setOnClickListener(this);
         }
 
