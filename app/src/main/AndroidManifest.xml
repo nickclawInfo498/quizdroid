@@ -17,16 +17,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Intro"
-            android:label="@string/title_activity_intro" >
-        </activity>
-        <activity
             android:name=".QuizActivity"
             android:label="@string/title_activity_quiz" >
-        </activity>
-        <activity
-            android:name=".ReviewActivity"
-            android:label="@string/title_activity_review" >
         </activity>
     </application>
 

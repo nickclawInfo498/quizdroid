@@ -29,7 +29,7 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Intent intent = new Intent(this, Intro.class);
+        Intent intent = new Intent(this, QuizActivity.class);
         intent.putExtra("name", (String) parent.getItemAtPosition(position));
         startActivity(intent);
     }
