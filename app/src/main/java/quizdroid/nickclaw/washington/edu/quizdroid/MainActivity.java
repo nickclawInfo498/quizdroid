@@ -20,8 +20,10 @@ public class MainActivity extends Activity implements AdapterView.OnItemClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        TopicRepository repo = App.getInstance().getTopicRepository();
+
         ListView list = (ListView) findViewById(R.id.listView);
-        String[] options = new String[] {"Math", "Physics", "Marvel Super Heroes"};
+        String[] options = repo.getTopics().keySet().toArray(new String[3]);
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.item_layout, R.id.textView, options);
         list.setAdapter(adapter);
         list.setOnItemClickListener(this);

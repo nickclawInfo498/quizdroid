@@ -25,11 +25,9 @@ import java.util.List;
 public class QuizActivity extends Activity {
 
     // some globals that all fragments can modify
-    public String[][] questions;
+    public Topic topic;
+    public List<Quiz> questions;
     public int index;
-    public String name;
-    public String description;
-    public Integer[] order;
     public int correct;
     public int lastIndex;
 
@@ -38,28 +36,15 @@ public class QuizActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_layout);
 
-        // get quiz singleton
-        QuizMap quizzes = QuizMap.getInstance();
+        TopicRepository repo = App.getInstance().getTopicRepository();
 
         // get intent info
         Intent intent = getIntent();
-        name = intent.getStringExtra("name");
-        switch(name) {
-            case "Math":
-                description = "Math questions! So fun";
-                break;
-            case "Physics":
-                description = "HOLY CRAP. PHYSICS FUN.";
-                break;
-            case "Marvel Super Heroes":
-                description = "They're like people. But better. How much do you know about them?";
-                break;
-        }
+        topic = repo.getTopic(intent.getStringExtra("name"));
 
         // get quiz
-        questions = quizzes.get(name);
+        questions = topic.getQuestions();
         index = 0;
-        order = new Integer[]{1, 2, 3, 4};
         correct = 0;
 
         switchFragment(new IntroFragment());
@@ -89,9 +74,9 @@ public class QuizActivity extends Activity {
             super.onActivityCreated(state);
             activity = (QuizActivity) getActivity();
 
-            ((TextView) activity.findViewById(R.id.textView)).setText(activity.name);
-            ((TextView) activity.findViewById(R.id.textView2)).setText(activity.description);
-            ((TextView) activity.findViewById(R.id.textView3)).setText(activity.questions.length + " questions.");
+            ((TextView) activity.findViewById(R.id.textView)).setText(activity.topic.getName());
+            ((TextView) activity.findViewById(R.id.textView2)).setText(activity.topic.getLongDescription());
+            ((TextView) activity.findViewById(R.id.textView3)).setText(activity.questions.size() + " questions.");
             ((Button) activity.findViewById(R.id.button)).setOnClickListener(this);
         }
 
@@ -121,19 +106,16 @@ public class QuizActivity extends Activity {
             super.onActivityCreated(state);
             activity = (QuizActivity) getActivity();
 
-            Log.i("state", "" + activity.name);
+            // get question/answers
+            String question = activity.questions.get(activity.index).getQuestion();
+            String[] answers = activity.questions.get(activity.index).getAnswers();
 
-            // get question
-            String[] question = activity.questions[activity.index];
-
-            // shuffle order
-            Collections.shuffle(Arrays.asList(activity.order));
-
-            ((TextView) activity.findViewById(R.id.textView4)).setText(question[0]);
-            ((RadioButton) activity.findViewById(R.id.radioButton)).setText(question[activity.order[0]]);
-            ((RadioButton) activity.findViewById(R.id.radioButton2)).setText(question[activity.order[1]]);
-            ((RadioButton) activity.findViewById(R.id.radioButton3)).setText(question[activity.order[2]]);
-            ((RadioButton) activity.findViewById(R.id.radioButton4)).setText(question[activity.order[3]]);
+            // set text
+            ((TextView) activity.findViewById(R.id.textView4)).setText(question);
+            ((RadioButton) activity.findViewById(R.id.radioButton)).setText(answers[0]);
+            ((RadioButton) activity.findViewById(R.id.radioButton2)).setText(answers[1]);
+            ((RadioButton) activity.findViewById(R.id.radioButton3)).setText(answers[2]);
+            ((RadioButton) activity.findViewById(R.id.radioButton4)).setText(answers[3]);
             ((Button) activity.findViewById(R.id.button2)).setOnClickListener(this);
         }
 
@@ -148,8 +130,8 @@ public class QuizActivity extends Activity {
             RadioButton checked = (RadioButton) activity.findViewById(group.getCheckedRadioButtonId());
             int index = Integer.parseInt((String) checked.getTag());
 
-            activity.correct += activity.order[index] == 1 ? 1 : 0;
-            activity.lastIndex = activity.order[index];
+            activity.correct += activity.questions.get(activity.index).getIndex() == index ? 1 : 0;
+            activity.lastIndex = index;
 
             activity.switchFragment(new AnswerFragment());
         }
@@ -172,23 +154,24 @@ public class QuizActivity extends Activity {
             super.onActivityCreated(state);
             activity = (QuizActivity) getActivity();
 
-            String[] question = activity.questions[activity.index];
+            String question = activity.questions.get(activity.index).getQuestion();
+            String[] answers = activity.questions.get(activity.index).getAnswers();
             int chose = activity.lastIndex;
 
-            ((TextView) activity.findViewById(R.id.textView8)).setText(question[0]);
-            ((TextView) activity.findViewById(R.id.textView5)).setText("Correct: " + question[1]);
-            ((TextView) activity.findViewById(R.id.textView6)).setText("Yours: " + question[activity.lastIndex]);
-            ((TextView) activity.findViewById(R.id.textView7)).setText(activity.correct + "/" + activity.questions.length + " correct");
+            ((TextView) activity.findViewById(R.id.textView8)).setText(question);
+            ((TextView) activity.findViewById(R.id.textView5)).setText("Correct: " + activity.questions.get(activity.index).getAnswer());
+            ((TextView) activity.findViewById(R.id.textView6)).setText("Yours: " + answers[activity.lastIndex]);
+            ((TextView) activity.findViewById(R.id.textView7)).setText(activity.correct + "/" + activity.questions.size() + " correct");
 
             Button button = (Button) activity.findViewById(R.id.button3);
-            button.setText(activity.index == activity.questions.length - 1 ? "Finish" : "Next");
+            button.setText(activity.index == activity.questions.size() - 1 ? "Finish" : "Next");
             button.setOnClickListener(this);
         }
 
         public void onClick(View v) {
             activity.index++;
 
-            if (activity.index == activity.questions.length) {
+            if (activity.index == activity.questions.size()) {
                 activity.finish();
                 return;
             }
