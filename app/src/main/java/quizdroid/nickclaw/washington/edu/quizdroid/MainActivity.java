@@ -76,9 +76,9 @@ public class MainActivity extends ActionBarActivity
             Intent intent = new Intent(this, UrlReceiver.class);
 
             float f = Float.parseFloat(preferences.getString(key, "10"));
-            int i = (int) f * 1000;// * 60 * 60;
+            int i = (int) f * 1000 * 60 * 60;
 
-            Log.i("preferences", "Setting interval to " + i + " seconds");
+            Log.i("preferences", "Setting interval to " + i + " milliseconds");
 
             PendingIntent pending = PendingIntent.getBroadcast(this, 0, intent, 0);
             ((AlarmManager) getSystemService(ALARM_SERVICE)).setInexactRepeating(AlarmManager.RTC_WAKEUP, 0, i, pending);
