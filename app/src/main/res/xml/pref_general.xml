@@ -1,0 +1,17 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <EditTextPreference
+        android:key="urlPreference"
+        android:title="URL"
+        android:defaultValue="http://tednewardsandbox.site44.com/questions.json"
+        android:selectAllOnFocus="true"
+        android:inputType="textUri"
+        android:singleLine="true"
+        android:maxLines="1"/>
+
+    <EditTextPreference
+        android:key="intervalPreference"
+        android:title="Interval (hours)"
+        android:inputType="numberDecimal" />
+
+</PreferenceScreen>
