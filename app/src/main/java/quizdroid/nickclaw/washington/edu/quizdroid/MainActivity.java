@@ -2,10 +2,17 @@ package quizdroid.nickclaw.washington.edu.quizdroid;
 
 import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.DialogFragment;
 import android.app.PendingIntent;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,6 +44,36 @@ public class MainActivity extends ActionBarActivity
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         prefs.registerOnSharedPreferenceChangeListener(this);
+
+
+        // from http://developer.android.com/training/monitoring-device-state/connectivity-monitoring.html
+        ConnectivityManager cm = (ConnectivityManager)this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
+        // check for airplane mode
+        // http://stackoverflow.com/questions/4319212/how-can-one-detect-airplane-mode-on-android
+        boolean isAirplane = false;
+        try {
+            isAirplane = Settings.Global.getInt(this.getContentResolver(), Settings.Global.AIRPLANE_MODE_ON) != 0;
+        } catch (Exception e) {}
+
+        if (!isConnected) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("No connection.");
+
+            if (isAirplane) {
+                builder
+                    .setMessage("It looks like airplane mode is on. Would you like to turn it off?")
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            startActivity(new Intent(Settings.ACTION_AIRPLANE_MODE_SETTINGS));
+                        }
+                    });
+            }
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
     }
 
     @Override
