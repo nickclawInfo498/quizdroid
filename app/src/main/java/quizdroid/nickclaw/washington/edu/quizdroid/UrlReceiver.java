@@ -17,6 +17,9 @@ public class UrlReceiver extends BroadcastReceiver {
         SharedPreferences preference = PreferenceManager.getDefaultSharedPreferences(context);
         String url = preference.getString("urlPreference", "");
 
-        Toast.makeText(context, url, Toast.LENGTH_SHORT).show();
+        Intent service = new Intent(context, DownloadService.class);
+        service.putExtra("url", url);
+
+        context.startService(service);
     }
 }
