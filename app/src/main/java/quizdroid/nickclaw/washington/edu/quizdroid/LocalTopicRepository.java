@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class LocalTopicRepository implements TopicRepository {
 
-    private Map<String, Topic> map;
+    protected Map<String, Topic> map;
 
     public LocalTopicRepository() {
         map = new HashMap<String, Topic>();

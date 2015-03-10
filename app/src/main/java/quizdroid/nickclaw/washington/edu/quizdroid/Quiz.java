@@ -7,18 +7,24 @@ import java.util.List;
  */
 public class Quiz {
 
-    private String question;
-    private String[] answers;
-    private int index;
+    public String text;
+    public String[] answers;
+    public int answer;
+
+    public Quiz() {
+        this.text = "";
+        this.answers = new String[0];
+        this.answer = 0;
+    }
 
     public Quiz(String question, String[] answers, int index) {
-        this.question = question;
+        this.text = question;
         this.answers = answers;
-        this.index = index;
+        this.answer = index;
     }
 
     public String getQuestion() {
-        return question;
+        return text;
     }
 
     public String[] getAnswers() {
@@ -26,10 +32,10 @@ public class Quiz {
     }
 
     public String getAnswer() {
-        return answers[index];
+        return answers[answer];
     }
 
     public int getIndex() {
-        return index;
+        return answer;
     }
 }

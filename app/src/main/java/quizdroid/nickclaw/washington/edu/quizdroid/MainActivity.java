@@ -27,7 +27,7 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TopicRepository repo = App.getInstance().getTopicRepository();
+        TopicRepository repo = App.getInstance().getTopicRepository(this);
 
         ListView list = (ListView) findViewById(R.id.listView);
         String[] options = repo.getTopics().keySet().toArray(new String[3]);

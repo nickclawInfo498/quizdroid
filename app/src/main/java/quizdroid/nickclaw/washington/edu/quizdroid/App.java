@@ -1,6 +1,7 @@
 package quizdroid.nickclaw.washington.edu.quizdroid;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 /**
@@ -21,14 +22,22 @@ public class App extends Application {
     }
 
     public App() {
-        this.repo = new LocalTopicRepository();
+        this.repo = null;
     }
 
     public void onCreate() {
         Log.i("lifecyle", "App.onCreate()");
     }
 
-    public TopicRepository getTopicRepository() {
+    public TopicRepository getTopicRepository(Context context) {
+        if (repo == null) {
+            try {
+                this.repo = new FileTopicRepository(context);
+            } catch (Exception e) {
+                Log.i("app", e.getMessage());
+                this.repo = null;
+            }
+        }
         return repo;
     }
 }

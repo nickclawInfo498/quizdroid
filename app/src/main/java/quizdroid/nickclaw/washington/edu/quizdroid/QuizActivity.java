@@ -36,7 +36,7 @@ public class QuizActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_layout);
 
-        TopicRepository repo = App.getInstance().getTopicRepository();
+        TopicRepository repo = App.getInstance().getTopicRepository(this);
 
         // get intent info
         Intent intent = getIntent();

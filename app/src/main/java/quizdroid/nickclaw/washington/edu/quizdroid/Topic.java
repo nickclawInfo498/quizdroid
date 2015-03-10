@@ -7,28 +7,28 @@ import java.util.List;
  */
 public class Topic {
 
-    private String name;
-    private String shortDescription;
-    private String longDescription;
-    private List<Quiz> questions;
+    public String title;
+    public String desc;
+    public List<Quiz> questions;
+
+    public Topic() {
+        this.title = "";
+        this.desc = "";
+        this.questions = null;
+    }
 
     public Topic(String name, String desc, String description, List<Quiz> questions) {
-        this.name = name;
-        this.shortDescription = desc;
-        this.longDescription = description;
+        this.title = name;
         this.questions = questions;
     }
 
     public String getName() {
-        return name;
+        return title;
     }
 
-    public String getShortDescription() {
-        return shortDescription;
-    }
 
     public String getLongDescription() {
-        return longDescription;
+        return desc;
     }
 
     public List<Quiz> getQuestions() {
